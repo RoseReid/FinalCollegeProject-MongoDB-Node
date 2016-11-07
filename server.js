@@ -5,6 +5,10 @@ const app = express();
 const template = require('./models/template.js').Model;
 const evaluation = require('./models/evaluation.js').Model;
 
+const evaluationRoutes = require('./routes/evaluationRoutes.js');
+const templateRoutes= require('./routes/templateRoutes.js');
+
+
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended:true }));
@@ -17,25 +21,9 @@ app.get('/', function (req, res) {
 });
 
 
+app.use('/', templateRoutes);
 
-app.get('/template', function(req, res) {
-	template.find(function (err, template) {
-		if (err) {
-			return res.sendStatus(404);
-		}
-		res.json({template: template});
-	})
-});
-
-app.get('/evaluation', function(req, res) {
-	console.log('evaluation')
-	evaluation.find(function (err, evaluation) {
-		if (err) {
-			return res.sendStatus(404);
-		}
-		res.json({evaluation: evaluation});
-	})
-});
+app.use('/', evaluationRoutes);
 
 
 
