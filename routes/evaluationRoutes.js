@@ -1,10 +1,9 @@
 'use strict'
-var express = require('express');
-var router = express.Router();
-// const routes = require('express').Router();
+const routes = require('express').Router();
 
-router.get('/evaluation', function(req, res) {
-	console.log('evaluation')
+
+routes.get('/evaluation', function(req, res) {
+	console.log('connected to evaluation')
 	template.find(function (err, evaluation) {
 		if (err) {
 			return res.sendStatus(404);
@@ -13,4 +12,4 @@ router.get('/evaluation', function(req, res) {
 	})
 });
 
-module.exports = router;
+module.exports = routes;

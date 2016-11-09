@@ -18,6 +18,7 @@ const clientInfoSchema = new mongoose.Schema({
 	clientName: {type:String, required:true},
 });
 
+//change to grade
 const evaluation = {
 	happyFace: {type:Boolean, required:true},
 	mehFace: {type:Boolean, required:true},
