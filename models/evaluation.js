@@ -12,7 +12,7 @@ db.once('open', function() {
 
 const ninjaSchema = new mongoose.Schema({
 	name: {type:String, required:true},
-	email: {type: String, set: toLower, required: true}
+	email: {type: String, lowercase: true, required: true}
 });
 
 const clientSchema = new mongoose.Schema({
@@ -32,10 +32,10 @@ const evaluationSchema = new mongoose.Schema({
 	//answers a better word and answers should contain a collection with tupples containing question and answer.
 
 	answers: {type: scale, required: true},
-	ninja: {type: ninjachema, required: true},
+	ninja: {type: ninjaSchema, required: true},
 	client: {type: clientSchema, required: true} 
 }, {timestamps: {updatedAt: "dateSaved"}
-);
+});
 
 exports.Model = db.model('evaluation', evaluationSchema);
 
