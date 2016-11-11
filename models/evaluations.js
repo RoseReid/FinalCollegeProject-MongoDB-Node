@@ -19,19 +19,17 @@ const clientSchema = new mongoose.Schema({
 	name: {type:String, required:true},
 });
 
-const question = new mongoose.Schema({
-	type: {type: String, required: true},
-	text: {type: String, required: true}
-});
 
-//change to grade 
 const answer = new mongoose.Schema({
 	//use number to identify the happyFace .....
 	// 0: {type:Boolean, required:true},
 	// 1: {type:Boolean, required:true},
 	// 2: {type:Boolean, required:true},
 	grade:{type:String, enum:['sad', 'meh', 'happy']},
-	question: {type:question, required:true}
+	question: {
+		type: {type: String, required: true},
+		text: {type: String, required: true}
+	}
 });
 
 const evaluationSchema = new mongoose.Schema({
