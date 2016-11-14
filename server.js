@@ -3,9 +3,10 @@ const express = require('express');
 const app = express();
 
 
-const template = require('./models/templates.js').Model;
-const evaluation = require('./models/evaluations.js').Model;
 
+
+const evaluations = require('./routes/evaluations.js');
+const templates = require('./routes/templates.js');
 
 const bodyParser = require('body-parser');
 
@@ -18,43 +19,8 @@ app.get('/', function (req, res) {
 });
 
 
-app.get('/evaluations', function(req, res) {
-	evaluation.find(function (err, evaluation) {
-		if (err) {
-			return res.sendStatus(404);
-		}
-		res.json({evaluationSchema: evaluation});
-	})
-});
-
-app.get('/templates', function(req, res) {
-	template.find(function (err, template) {
-
-		if (err) {
-			return res.sendStatus(404);
-		}
-		res.json({templateSchema: template});
-	})
-});
-
-app.post('/evaluations', function(req, res) {
-	evaluation.save(function (err, evaluation) {
-		if (err) {
-			return res.sendStatus(404);
-		}
-		res.json(evaluation);
-	})
-});
-
-app.post('/templates', function(req, res) {
-	template.save(function (err, template) {
-
-		if (err) {
-			return res.sendStatus(404);
-		}
-		res.json(req.body);
-	})
-});
+app.use('/', evaluations);
+app.use('/', templates);
 
 
 app.listen(3000, function () {
