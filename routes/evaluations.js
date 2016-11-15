@@ -32,11 +32,12 @@ router.get('/evaluations/peer-evaluations', function(req, res){
   .select({"client.name": req.query.name})
   .sort({dateSaved: -1, client: -1})
   .limit(parseInt(req.query.limit))
-  .exec(function(err, client)
+  .exec(function(err, client){
   res.json({client});
   })
 });
 
+// http://localhost:3000/evaluations/peer-evaluations/?name=Apple&limit=2
 
 
 
@@ -61,7 +62,7 @@ router.put("/evaluations/:id", function(req,res){
 });
 });
 
-router.delete("/api/evaluations/:id", function(req,res){
+router.delete("/evaluations/:id", function(req,res){
   var id = req.params.id;
   Evaluation.findById(id, function (err, evaluation) {
     Evaluation.findById(req.params.id, function(err, evaluation){

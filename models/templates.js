@@ -20,3 +20,14 @@ const templateSchema = new mongoose.Schema({
 
 exports.Model = db.model('template', templateSchema);
 
+
+
+// {
+
+//   "question": [
+//     {
+//       "type": "cat questasdfasdfdsions",
+//       "text": "casdfasdat question text"
+//     }
+//   ]
+// }
