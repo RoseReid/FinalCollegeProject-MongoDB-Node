@@ -4,16 +4,15 @@ const router = express.Router();
 const Evaluation = require('./../models/evaluations.js').Model;
 
 
-
-
-
 router.post('/evaluations', function(req, res) {
 	var evaluationData = req.body;
+  console.log(req);
 	var evaluation = new Evaluation(evaluationData);
 	evaluation.save(function (err, evaluationSaved) {
 		if (err) {
 			console.log(err);
 			return res.sendStatus(404);
+
 		}
 		res.json(evaluationSaved);
 	})
@@ -28,22 +27,15 @@ router.get('/evaluations', function(req, res) {
   })
 });
 
-router.get('/evaluations/clients', function(req, res){
-  Evaluation.find({client: 'name'}).sort({ninja: X}).limit(x).exec(function(err, clients){
-    function(err, client){
-      if (err){
-        return res.sendStatus(404);
-      }
-      res.json(clients.x)
-      }
+router.get('/evaluations/peer-evaluations', function(req, res){
+  Evaluation.find({"ninja.name": req.query.name})
+  .sort({dateSaved: -1, client: -1})
+  .limit(parseInt(req.query.limit)||10)
+  .exec(function(err, client)
+  {
+  res.json(client);
   })
 });
-
-// ProjectModel.find({projectName: 'name'}).sort({viewCount: -1}).limit(5).exec( 
-//     function(err, projects) {
-//         ...
-//     }
-// );
 
 
 router.put("/evaluations/:id", function(req,res){

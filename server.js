@@ -2,9 +2,6 @@
 const express = require('express');
 const app = express();
 
-
-
-
 const evaluations = require('./routes/evaluations.js');
 const templates = require('./routes/templates.js');
 
@@ -15,7 +12,7 @@ app.use(bodyParser.json());
 
 
 app.get('/', function (req, res) {
-  res.send('Test Hello, I am working!');
+  res.send('<form method=“post” action=“/evaluations”><input name="foo" type=“text” /><input type=“submit”></form>');
 });
 
 

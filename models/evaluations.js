@@ -21,10 +21,7 @@ const clientSchema = new mongoose.Schema({
 
 
 const answer = new mongoose.Schema({
-	//use number to identify the happyFace .....
-	// 0: {type:Boolean, required:true},
-	// 1: {type:Boolean, required:true},
-	// 2: {type:Boolean, required:true},
+
 	grade:{type:String, enum:['sad', 'meh', 'happy']},
 	question: {
 		type: {type: String, required: true},
@@ -44,3 +41,20 @@ const evaluationSchema = new mongoose.Schema({
 exports.Model = db.model('evaluation', evaluationSchema);
 
 
+
+ // {
+ // 	"ninja": {
+ // 		"name": "Jack",
+ // 		"email": "Jack@email.com"
+ // 	},
+ // 	"client": {
+ // 		"name": "Jack Client"
+ // 	},
+ // 	"answers": [{
+ // 		"grade": "sad",
+ // 		"question": {
+ // 			"type": "JackType",
+ // 			"text": "JackText"
+ // 		}
+ // 	}]
+ // }
