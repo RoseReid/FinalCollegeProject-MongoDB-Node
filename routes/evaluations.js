@@ -29,13 +29,21 @@ router.get('/evaluations', function(req, res) {
 
 router.get('/evaluations/peer-evaluations', function(req, res){
   Evaluation.find({"ninja.name": req.query.name})
+  .select({"client.name": req.query.name})
   .sort({dateSaved: -1, client: -1})
   .limit(parseInt(req.query.limit)||10)
   .exec(function(err, client)
   {
-  res.json(client);
+      var c;
+      for (c=0; c==client.length; c++){
+        delete client[c].answers;
+      }
+    
+  res.json({client});
   })
 });
+
+
 
 
 router.put("/evaluations/:id", function(req,res){

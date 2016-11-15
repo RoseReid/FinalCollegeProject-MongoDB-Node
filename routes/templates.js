@@ -14,7 +14,7 @@ router.get("/templates", function(req, res) {
 });
 
 
-router.post("/templates/add", function(req, res) {
+router.post("/templates", function(req, res) {
 	var templateData = req.body;
 	var template = new Template(templateData);
 	template.save(function (err, templateSaved) {
@@ -47,7 +47,7 @@ router.put("/templates/:id", function(req,res){
 });
 });
 
-router.delete("/templates/delete/:id", function(req,res){
+router.delete("/templates/:id", function(req,res){
   var id = req.params.id;
   Template.findById(id, function (err, template) {
     Template.findById(req.params.id, function(err, template){
