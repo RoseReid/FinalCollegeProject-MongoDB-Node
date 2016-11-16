@@ -1,5 +1,5 @@
 {
-  "name": "api-evaluation",
+  "name": "final-college-project",
   "version": "1.0.0",
   "main": "expressServer.js",
   "scripts": {
@@ -24,11 +24,11 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RoseReid/examensarbete.git"
+    "url": "git+https://github.com/RoseReid/FinalCollegeProject-MongoDB-Node.git"
   },
   "bugs": {
-    "url": "https://github.com/RoseReid/examensarbete/issues"
+    "url": "https://github.com/RoseReid/FinalCollegeProject-MongoDB-Node/issues"
   },
-  "homepage": "https://github.com/RoseReid/examensarbete#readme",
+  "homepage": "https://github.com/RoseReid/FinalCollegeProject-MongoDB-Node#readme",
   "description": ""
 }
