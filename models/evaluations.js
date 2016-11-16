@@ -18,7 +18,7 @@ const ninjaSchema = new mongoose.Schema({
 });
 
 const clientSchema = new mongoose.Schema({
-	name: {type:String, required:true},
+	name: {type:String, required:true}
 });
 
 
