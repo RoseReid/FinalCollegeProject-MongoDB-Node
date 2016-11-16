@@ -3,20 +3,20 @@ const express = require('express');
 const router = express.Router();
 const Evaluation = require('./../models/evaluations.js').Model;
 
-
 router.post('/evaluations', function(req, res) {
-	var evaluationData = req.body;
+  var evaluationData = req.body;
   console.log(req);
-	var evaluation = new Evaluation(evaluationData);
-	evaluation.save(function (err, evaluationSaved) {
-		if (err) {
-			console.log(err);
-			return res.sendStatus(404);
+  var evaluation = new Evaluation(evaluationData);
+  evaluation.save(function (err, evaluationSaved) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(404);
 
-		}
-		res.json(evaluationSaved);
-	})
+    }
+    res.json(evaluationSaved);
+  })
 });
+
 
 router.get('/evaluations', function(req, res) {
   Evaluation.find(function (err, evaluation) {
@@ -69,6 +69,7 @@ router.get('/evaluations/peer-evaluations', function(req, res){
 //   res.json({client});
 //   })
 // });
+
 
 
 router.put("/evaluations/:id", function(req,res){
