@@ -28,17 +28,47 @@ router.get('/evaluations', function(req, res) {
 });
 
 router.get('/evaluations/peer-evaluations', function(req, res){
-  Evaluation.find({"ninja.name": req.query.name})
-  .select({"client.name": req.query.name})
-  .sort({dateSaved: -1, client: -1})
-  .limit(parseInt(req.query.limit))
+  console.log(req.headers)
+  const ninjaName = req.get('ninja.name');
+  const limit = req.get('limit');
+  Evaluation.find({"ninja.name": ninjaName})
+  .limit(parseInt(limit))
+  .select('dateSaved client.name client._id')
+  .sort({dateSaved: 'desc'})
   .exec(function(err, client){
   res.json({client});
   })
 });
 
+// router.get('/evaluations/getEvaluationsByNinjaId', function(req, res){
+//   const ninjaId = req.get('ninja.id')
+//   console.log(ninjaId)
+//   Evaluation.find({'ninja._id': ninjaId})
+//   .exec(function(err, evaluations){
+//     res.json(evaluations)
+//   })
+// })
+
+
+// router.get('/evaluations/get-ninjas', function(req, res){
+//  Evaluation.find()
+//  .select('ninja._id ninja.name')
+//  .exec(function(err, ninjas){
+//   res.json(ninjas);
+//  })
+// });
+
 // http://localhost:3000/evaluations/peer-evaluations/?name=Apple&limit=2
 
+// router.get('/evaluations/peer-evaluations', function(req, res){
+//   Evaluation.find({"ninja.name": req.query.name})
+//   .select({"client.name": req.query.name})
+//   .sort({dateSaved: -1, client: -1})
+//   .limit(parseInt(req.query.limit))
+//   .exec(function(err, client){
+//   res.json({client});
+//   })
+// });
 
 
 router.put("/evaluations/:id", function(req,res){
