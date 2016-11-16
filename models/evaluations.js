@@ -11,9 +11,9 @@ db.once('open', function() {
 });
 
 const ninjaSchema = new mongoose.Schema({
-	firstName: {type:String, required:true},
-	lastName: {type:String, required:true},
-	nickName: {type:String},
+	   name: {type:String, required:true},
+	// firstName: {type:String, required:true},
+	// lastName: {type:String, required:true},
 	email: {type: String, lowercase: true, required: true}
 });
 
