@@ -14,7 +14,7 @@ const evaluation = require('./../controllers/evaluation.js');
 	router.get('/peer-evaluations',evaluation.getNinjasClients);
 	//save email instead
 
-	router.put('/',evaluation.updateEval);
+	router.put('/:id',evaluation.updateEval);
 
 	router.post('/',evaluation.createEval);
 	 //name and email into the headers

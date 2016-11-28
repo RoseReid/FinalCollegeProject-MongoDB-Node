@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 var request = require('request');
 var Evaluation = require('../models/evaluations.js').Model;
 
@@ -21,9 +22,7 @@ exports.getEvals = function(req, res, next) {
 };
 
 
-
-
-exports.getNinjasClients = function(req, res){
+exports.getNinjasClients = function(req, res, next){
   console.log(req.headers)
   const ninjaEmail = req.get('ninja.email');
   // const ninjaName = req.get('ninja.name');
@@ -40,7 +39,7 @@ exports.getNinjasClients = function(req, res){
 
 
 //username and email in headers not body
-exports.createEval = function(req, res) {
+exports.createEval = function(req, res, next) {
   var evaluationData = req.body;
   var evaluation = new Evaluation(evaluationData);
   evaluation.save(function (err, evaluationSaved) {
@@ -64,17 +63,15 @@ exports.createEval = function(req, res) {
 
 exports.updateEval = function(req,res, next){
   var evaluationData = req.body;
-  var idByHeader = req.get("X-eval-id");  
-  Evaluation.findById(idByHeader, function(err, evaluation){
+  var id = req.params.id;
+  Evaluation.findById(id, function(err, evaluation){
     if (err){
-        console.log('evaluations not found'); 
+      console.log('evaluations not found'); 
       next(err);        //not found since id does not exist
-    }else if(!evaluation){
-      let err = new Error("id not found!")
-      err.status = 404;
-      next(err);
     }
-    else{
+    //make sure that its the same ninja in the header that once in time created the eval
+    //if (evaluation.client.ninjaEmail!== headerUserEmial)
+    //else{
       evaluation.set(evaluationData);
       evaluation.save(function(err, evaluationSaved){
         if (err){
@@ -86,27 +83,31 @@ exports.updateEval = function(req,res, next){
           res.json(evaluationSaved);  //default 200 is fine since no brand new
         }
       })
-    }
+    //}
 });
 };
 
 
 //that can stay inthe params
 exports.deleteEval = function(req,res, next){
-  if(!id){
-        let err = new Error ("id not found")
-        err.status = 404;
-        console.log(err)
-        next(err)
-      }
+  
   var id = req.params.id;
-    Evaluation.findById(id, function(err, evaluation){
-         if(!evaluation){
+  //guard
+   console.log(req.params.id)
+  if(!id){
+    console.log("Id undefined");
         let err = new Error ("id not found")
         err.status = 404;
         console.log(err)
         next(err)
       }
+    Evaluation.findById(id, function(err, evaluation){
+      if(!evaluation){  
+        let err = new Error ("eval not found")
+        err.status = 404;
+        console.log(err)
+        next(err)
+     }
 
     else{
       evaluation.remove(function(err, evaluationRemoved){
