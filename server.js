@@ -4,21 +4,28 @@ const app = express();
 
 const evaluations = require('./routes/evaluations.js');
 const templates = require('./routes/templates.js');
-
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const watch = require('node-watch');
+ mongoose.Promise = require('q').Promise;
 
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
 
 app.get('/', function (req, res) {
-  res.send('<form method=“post” action=“/evaluations”><input name="foo" type=“text” /><input type=“submit”></form>');
+  res.send("Hooray, the server is working");
 });
 
+//look into
+app.use('/evaluations', evaluations);
+app.use('/templates', templates);
+app.use(errorHandler);
 
-app.use('/', evaluations);
-app.use('/', templates);
 
+function errorHandler(err, req, res, next){
+	res.status(err.status || 500).send({error: err})
+}  
 
 app.listen(3000, function () {
   console.log('Server started at port 3000');

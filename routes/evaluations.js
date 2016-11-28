@@ -1,117 +1,24 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const Evaluation = require('./../models/evaluations.js').Model;
-
-router.post('/evaluations', function(req, res) {
-  var evaluationData = req.body;
-  console.log(req);
-  var evaluation = new Evaluation(evaluationData);
-  evaluation.save(function (err, evaluationSaved) {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(404);
-
-    }
-    res.json(evaluationSaved);
-  })
-});
- 
-
-router.get('/evaluations', function(req, res) {
-  Evaluation.find(function (err, evaluation) {
-    if (err) {
-      return res.sendStatus(404);
-    }
-    res.json({evaluationSchema: evaluation});
-  })
-});
-
-router.get('/evaluations/peer-evaluations', function(req, res){
-  console.log(req.headers)
-  const ninjaName = req.get('ninja.name');
-  const limit = req.get('limit');
-  Evaluation.find({"ninja.name": ninjaName})
-  .limit(parseInt(limit))
-  .select('dateSaved client.name client._id')
-  .sort({dateSaved: 'desc'})
-  .exec(function(err, client){
-  res.json({client});
-  })
-});
-
-// router.get('/evaluations/getEvaluationsByNinjaId', function(req, res){
-//   const ninjaId = req.get('ninja.id')
-//   console.log(ninjaId)
-//   Evaluation.find({'ninja._id': ninjaId})
-//   .exec(function(err, evaluations){
-//     res.json(evaluations)
-//   })
-// })
-
-
-// router.get('/evaluations/get-ninjas', function(req, res){
-//  Evaluation.find()
-//  .select('ninja._id ninja.name')
-//  .exec(function(err, ninjas){
-//   res.json(ninjas);
-//  })
-// });
-
-// http://localhost:3000/evaluations/peer-evaluations/?name=Apple&limit=2
-
-// router.get('/evaluations/peer-evaluations', function(req, res){
-//   Evaluation.find({"ninja.name": req.query.name})
-//   .select({"client.name": req.query.name})
-//   .sort({dateSaved: -1, client: -1})
-//   .limit(parseInt(req.query.limit))
-//   .exec(function(err, client){
-//   res.json({client});
-//   })
-// });
+const evaluation = require('./../controllers/evaluation.js');
 
 
 
-router.put("/evaluations/:id", function(req,res){
-  var evaluationData = req.body;
 
-  Evaluation.findById(req.params.id, function(err, evaluation){
-    if (err){
-      console.log(err)
-      return res.sendStatus(404);
-    }else{
-      evaluation.set(evaluationData);
-      evaluation.save(function(err, evaluationSaved){
-        if (err){
-          console.log(err)
-          return res.sendStatus(404);
-        }else{
-          res.json(evaluationSaved);
-        }
-      })
-    }
-});
-});
+//router.route('/evaluations')
+	
 
-router.delete("/evaluations/:id", function(req,res){
-  var id = req.params.id;
-  Evaluation.findById(id, function (err, evaluation) {
-    Evaluation.findById(req.params.id, function(err, evaluation){
-    if (err){
-      console.log(err)
-      return res.sendStatus(404);
-    }else{
-      evaluation.remove(function(err, evaluationRemoved){
-        if (err){
-          console.log(err)
-          return res.sendStatus(404);
-        }else{
-          res.json(evaluationRemoved);
-        }
-      });
-    }
-    });
-  });
-});
+	router.get('/',evaluation.getEvals);
+
+	router.get('/peer-evaluations',evaluation.getNinjasClients);
+	//save email instead
+
+	router.put('/',evaluation.updateEval);
+
+	router.post('/',evaluation.createEval);
+	 //name and email into the headers
+
+	router.delete('/:id',evaluation.deleteEval);
 
 module.exports = router;
