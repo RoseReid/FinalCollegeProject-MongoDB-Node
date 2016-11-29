@@ -62,3 +62,33 @@
 //     }
 //     });
 // };
+
+
+
+exports.updateEval = function(req,res, next){
+  var evaluationData = req.body;
+  var idByHeader = req.get("X-eval-id");  
+  Evaluation.findById(idByHeader, function(err, evaluation){
+    if (err){
+        console.log('evaluations not found'); 
+      next(err);        //not found since id does not exist
+    }else if(!evaluation){
+      let err = new Error("id not found!")
+      err.status = 404;
+      next(err);
+    }
+    else{
+      evaluation.set(evaluationData);
+      evaluation.save(function(err, evaluationSaved){
+        if (err){
+          console.log(err)
+          //bad request since the content does not match. Have content but can't save it
+          err.status = 400;
+          next(err);
+        }else{
+          res.json(evaluationSaved);  //default 200 is fine since no brand new
+        }
+      })
+    }
+});
+};
