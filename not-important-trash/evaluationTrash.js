@@ -29,40 +29,6 @@
 // };
 
 
-// exports.deleteEval = function(req,res, next){
-//   var id = req.params.id;
-//     Evaluation.findById(id, function(err, evaluation){
-//       if(!id || !evaluation){
-//       let err = new Error(function(id, evaluation){
-//         if (!id){
-//         let err = new Error ("id not found")
-//         err.status = 404;
-//         next(err)
-//       }
-//        else if(!evaluation){
-//         let err = new Error ("id not found")
-//         err.status = 404;
-//         next(err)
-//       }
-//       })
-//       console.log(err)
-//       err.status= (404);
-//       next(err);
-//     }else{
-//       evaluation.remove(function(err, evaluationRemoved){
-//         if (err){
-//         let err = new Error("eval not removed, sorry!")
-//         err.status = 400;
-
-//         next(err);
-//           }else{
-//           res.json(evaluationRemoved);
-//         }
-//       });
-//     }
-//     });
-// };
-
 
 
 exports.updateEval = function(req,res, next){
