@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const template = require('./../controllers/templates.js');
 
-
 router.get('/', template.getTemplate);
 
 router.post('/', template.postTemplate);

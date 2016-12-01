@@ -1,63 +1,64 @@
 'use strict';
-var Template = require('../models/templates.js').Model;
+const Template = require('../models/templates.js').Model;
 
-exports.getTemplate = function (req, res) {
+exports.getTemplate = function (req, res, next) {
   Template.find(function (err, template) {
     if (err) {
-            // Bad request
-      return res.sendStatus(400);
+      let err = new Error('templates not found');
+      err.status= (400);
+      return next(err);
     }
-    res.json({
-      templateSchema: template
-    });
+    res.json({templateSchema: template});
   });
 };
 
-exports.postTemplate = function (req, res) {
-  var templateData = req.body;
-  var template = new Template(templateData);
+exports.postTemplate = function (req, res, next) {
+  const templateData = req.body;
+  const template = new Template(templateData);
   template.save(function (err, templateSaved) {
     if (err) {
-      return res.sendStatus(500);
+      let err = new Error('templates not created');
+      err.status = (409);
+      next(err);
+    } else {
+      res.json(templateSaved);
     }
-    res.json(templateSaved);
   });
 };
 
-exports.putTemplate = function (req, res) {
-  var templateData = req.body;
-
-  Template.findById(req.params.id, function (err, template) {
-    if (err) {
-      return res.sendStatus(400);
+exports.putTemplate = function (req, res, next) {
+  const templateData = req.body;
+  const id = req.params.id;
+  Template.findById({_id: id}, function (err, template) {
+     if (err) {
+      return next(err);
     } else {
       template.set(templateData);
       template.save(function (err, templateSaved) {
         if (err) {
-          return res.sendStatus(204);
-        } else {
-          res.json(templateSaved);
-        }
-      });
+      let err = new Error('templates not created');
+      err.status = (409);
+      next(err);
+    } else {
+      res.json(templateSaved);
     }
   });
 };
 
-exports.deleteTemplate = function (req, res) {
-  var id = req.params.id;
-  Template.findById(id, function (err, template) {
-    Template.findById(req.params.id, function (err, template) {
+exports.deleteTemplate = function (req, res, next) {
+    const id = req.params.id;
+    Template.findById({_id: id}, function (err, template) {
       if (err) {
-        return res.sendStatus(400);
+        return next(err);
       } else {
         template.remove(function (err, templateRemoved) {
           if (err) {
-            return res.sendStatus(204);
+            let err = new Error('templates not deleted');
+            return next(err);
           } else {
             res.json(templateRemoved);
           }
         });
       }
     });
-  });
 };
