@@ -83,20 +83,3 @@ evaluationSchema.statics.getNinjasClients = function (ninjaEmail, limit) {
 };
 
 exports.Model = db.model('evaluation', evaluationSchema);
-
-// {
-// 	"ninja": {
-// 		"name": "Jack",
-// 		"email": "Jack@email.com"
-// 	},
-// 	"client": {
-// 		"name": "Jack Client"
-// 	},
-// 	"answers": [{
-// 		"grade": "sad",
-// 		"question": {
-// 			"type": "JackType",
-// 			"text": "JackText"
-// 		}
-// 	}]
-// }

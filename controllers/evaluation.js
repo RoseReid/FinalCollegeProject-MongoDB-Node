@@ -9,8 +9,8 @@ exports.getEvals = function (req, res, next) {
     if (err) {
       return next(err);
     } else if (!evaluation) {
-      let err = new Error("that's not your email!");
-      err.status = (403);
+      let err = new Error('no evals found!');
+      err.status = (404);
       return next(err);
     } else {
       res.json({evaluationSchema: evaluation});
@@ -31,13 +31,13 @@ exports.getNinjasClients = function (req, res, next) {
 
 exports.createEval = function (req, res, next) {
   const evaluationData = req.body;
-  const evaluation = new Evaluation(evaluationData);
+  const evaluation = new Evaluation(evaluationData); // try catch
   evaluation.save(function (err, evaluationSaved) {
     if (err) {
       return next(err);
-    } else if (!evaluation) {
+    } else if (!evaluationSaved || evaluationSaved.length === 0) {
       let err = new Error('Evaluations not created!');
-      err.status = (409);
+      err.status = (503);
       return next(err);
     } else {
       res.json(evaluationSaved);
@@ -46,27 +46,26 @@ exports.createEval = function (req, res, next) {
 };
 
 exports.updateEval = function (req, res, next) {
-  var evaluationData = req.body;
-  var id = req.params.id;
+  const evaluationData = req.body;
+  const id = req.params.id;
   const ninjaEmail = req.get('ninja.email');
   Evaluation.findOne({_id: id, 'ninja.email': ninjaEmail}, function (err, evaluation) {
     if (err) {
       return next(err);
-    } else if (!evaluation) {
-      let err = new Error("that's not your email, buddy!");
-      err.status = (403);
-      return next(err);
-    } else {
-      evaluation.set(evaluationData);
-      evaluation.save(function (err, evaluationSaved) {
-        if (err) {
-          err.status = 400;
-          return next(err);
-        } else {
-          res.json(evaluationSaved);
-        }
-      });
     }
+    if (!evaluation) {
+      let err = new Error("that's not your email, buddy!");
+      err.status = (404);
+      return next(err);
+    }
+    evaluation.set(evaluationData);
+    evaluation.save(function (err, evaluationSaved) {
+      if (err) {
+        err.status = 500;
+        return next(err);
+      }
+      res.json(evaluationSaved);
+    });
   });
 };
 
@@ -83,10 +82,10 @@ exports.deleteEval = function (req, res, next) {
     evaluation.remove(function (err, evaluationRemoved) {
       if (err) {
         let err = new Error('eval not removed, sorry!');
-        err.status = 400;
+        err.status = 503;
         return next(err);
-      }else {
-      res.json(evaluationRemoved);
+      } else {
+        res.json(evaluationRemoved);
       }
     });
   });
