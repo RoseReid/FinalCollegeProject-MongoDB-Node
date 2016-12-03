@@ -1,6 +1,5 @@
 'use strict';
 
-const LintStream = require('jslint').LintStream;
 const express = require('express');
 const app = express();
 
@@ -8,7 +7,6 @@ const evaluations = require('./routes/evaluations.js');
 const templates = require('./routes/templates.js');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const watch = require('node-watch');
 mongoose.Promise = require('q').Promise;
 
 app.use(bodyParser.urlencoded({
