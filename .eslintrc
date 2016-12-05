@@ -1,0 +1,29 @@
+{
+  "plugins": [
+    "babel"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEveryWhere": "true"
+  },
+  "extends" : [
+    "standard"
+  ],
+  "env"     : {
+    "node" : true,
+    "browser" : true
+  },
+  "globals" : {
+    "__DEV__"      : false,
+    "__PROD__"     : false,
+    "__DEBUG__"    : false,
+    "__COVERAGE__" : false,
+    "__BASENAME__" : false
+  },
+  "rules": {
+    "generator-star-spacing": 0,
+    "semi": [2, always]
+
+  }
+}
