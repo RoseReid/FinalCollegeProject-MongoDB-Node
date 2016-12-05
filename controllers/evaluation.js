@@ -45,6 +45,7 @@ exports.createEval = function (req, res, next) {
   });
 };
 
+//updateEvaluation
 exports.updateEval = function (req, res, next) {
   const evaluationData = req.body;
   const id = req.params.id;
@@ -55,6 +56,7 @@ exports.updateEval = function (req, res, next) {
     }
     if (!evaluation) {
       let err = new Error("that's not your email, buddy!");
+      //forbidden
       err.status = (404);
       return next(err);
     }
