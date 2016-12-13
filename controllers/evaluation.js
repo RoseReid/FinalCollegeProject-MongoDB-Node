@@ -1,7 +1,7 @@
 
 'use strict';
 
-const Evaluation = require('../models/evaluations.js').Model;
+const Evaluation = require('../models/evaluations.js');
 
 exports.getEvals = function (req, res, next) {
   const ninjaEmail = req.get('ninja.email');

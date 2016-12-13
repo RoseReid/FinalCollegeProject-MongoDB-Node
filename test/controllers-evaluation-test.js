@@ -1,81 +1,55 @@
-'use strict'
-var chai = require('chai'),
- mocha = require('mocha')
-var http_mocks = require('node-mocks-http')
-var should = require('should')
-var mockery = require('mockery')
+var chai = require('chai');
+var mocha = require('mocha');
+var proxyquire = require('proxyquire');
+// var http_mocks = require('node-mocks-http');
+var should = require('should');
+// var mockery = require('mockery');
+var sinon = require('sinon');
 
-var evaluation = require('../controllers/evaluation.js');
+/* 1st
+Ensure fetches Ninja email
+mock req to return email (req.get) */
+// given
 
-function buildResponse() {
-  return http_mocks.createResponse({eventEmitter: require('events').EventEmitter})
-}
+describe('evaluation', function () {
 
-describe('News Controller Tests', function() {
+  it ('should return all evaluations', function () {
 
-  before(function() {
-    mockery.enable({
-      warnOnUnregistered: false
-    })
+    // given
+    var res = { json: sinon.spy() };
+    var nextStub = sinon.stub();
+    var req = { get: sinon.spy() };
+    var evalStub = {
+      Model: {
+        find: () => console.log('BOoooo')
+      }
+    };
+    var evaluation = proxyquire('../controllers/evaluation.js',
+      {
+        '../models/evaluations': evalStub
+      });
+    console.log({evaluation});
 
-    mockery.registerMock('../models/evaluations.js', {
-      all: (cb) => cb(null, ["First news", "Second news"]),
-      create: (evaluation, cb) => cb(null, {'ninja.email': ninjaEmail})
-    })
+    // when
+    evaluation.getEvals(req, res, nextStub);
 
-    this.controller = require('../controllers/evaluation.js')
-  })
+    // then
+    req.get.calledWith('ninja.email').should.equal(true);
+    nextStub.called.should.equal(false);
 
-  after(function() {
-    mockery.disable()
-  })
 
-  it('all', function(done) {
-    var response = buildResponse()
-    var request  = http_mocks.createRequest({
-      method: 'GET',
-      url: '/evaluations',
-    })
+  });
+});
 
-    response.on('end', function() {
-      response._isJSON().should.be.true
 
-      var data = JSON.parse(response.getEvals())
-      should.not.exist(data.error)
-     // data.news.length.should.eql(2)
-      //data.news[0].should.eql("First news")
-      //data.news[1].should.eql("Second news")
+/* 2nd
+Mock req get(does not matter what I return inside inside find {ninjaEmail:req.get}) */
 
-      done()
-    })
-
-    this.evaluation.getEvals(request, response)
-  })
-
-  /*it('create', function(done) {
-    var response = buildResponse()
-    var request  = http_mocks.createRequest({
-      method: 'POST',
-      url: '/create',
-    })
-
-    request.body = {
-      title: "Something is happening",
-      text: "Something is happening in the world!"
-    }
-
-    response.on('end', function() {
-      response._isJSON().should.be.true
-
-      var data = JSON.parse(response._getData())
-      should.not.exist(data.error)
-      data.news.title.should.eql(request.body.title)
-      data.news.text.should.eql(request.body.text)
-      data.news.id.should.exist
-
-      done()
-    })
-
-    this.controller.handle(request, response)
-  })*/
-})
+/* 3rd copy above and then pass in function. put a string 
+or whatever to see that next with string is called
+Repeat (false- but don't pass eval')
+ensure next is called w/ new error
+Repeat the same but (false, pass in eval)=> pass in eval(true/string)
+assert res.json(evalSchema: matches whats in the true/string)
+ 
+ */

@@ -3,13 +3,16 @@
 // repetitive code
 const mongoose = require('mongoose');
 
+
 // get url from NODE_ENV
+/*
 const url = 'mongodb://localhost:27017/myEvaluations';
 var db = mongoose.createConnection(url);
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
   console.log('connected evaluation');
 });
+*/
 
 const ninjaSchema = new mongoose.Schema({
   name: {
@@ -82,4 +85,5 @@ evaluationSchema.statics.getNinjasClients = function (ninjaEmail, limit) {
         .exec();
 };
 
-exports.Model = db.model('evaluation', evaluationSchema);
+module.exports = mongoose.model('Evaluation', evaluationSchema);
+//exports.Model = db.model('evaluation', evaluationSchema);

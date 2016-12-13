@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "npm start",
     "watch": "npm-scripts-watcher",
-    "test": "mocha",
+    "test": "mocha test/controllers-evaluation-test.js",
     "lint": "eslint controllers models routes",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -38,7 +38,9 @@
     "node-mocks-http": "^1.5.4",
     "npm-scripts-watcher": "^1.0.2",
     "proxyquire": "^1.7.10",
-    "should": "^11.1.1"
+    "rewire": "^2.5.2",
+    "should": "^11.1.1",
+    "supertest": "^2.0.1"
   },
   "repository": {
     "type": "git",
