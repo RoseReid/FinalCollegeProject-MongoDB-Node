@@ -2,7 +2,6 @@
 'use strict';
 
 const Evaluation = require('../models/evaluations.js');
-
 exports.getEvals = function (req, res, next) {
   const ninjaEmail = req.get('ninja.email');
   Evaluation.find({'ninja.email': ninjaEmail}, function (err, evaluation) {

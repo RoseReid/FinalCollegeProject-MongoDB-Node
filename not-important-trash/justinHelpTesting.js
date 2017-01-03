@@ -1,6 +1,39 @@
+  
+  
+  it ('should respond with a JSON object', function () {
+    var res = { json: sinon.spy() };
+    var next = sinon.spy();
+    var err = false; // first this is true, 2nd it is false, 3rd does not matter
+    var req = {
+      get: function () { return ('Content-Type', /json/); }
+    };
+    var evalStub = {
+      find: function (obj, fn) {
+        fn(err, 1234);
+        //fn(true, false);
+        //fn(true, 1234);
+      }
+    };
+    var evaluation = proxyquire('../controllers/evaluation.js',
+      {
+        '../models/evaluations.js': evalStub
+      });
+
+    // when
+    evaluation.getEvals(req, res, next);
+
+    // then
+    next.calledWith(err).should.be(true);
 
 
+    var expected = new Error('no evals found!');
+    expected.status = 404;
+    next.calledWith(expected).should.be(true);
 
+
+    res.json.calledWith({evaluationSchema: 1234}).should.be(true);
+
+  });
 
 
 // var mongooseMock = require('mongoose-mock'),

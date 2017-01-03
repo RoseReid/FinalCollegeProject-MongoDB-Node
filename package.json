@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm start",
     "watch": "npm-scripts-watcher",
-    "test": "mocha test/controllers-evaluation-test.js",
+    "test": "mocha",
     "lint": "eslint controllers models routes",
     "lint:fix": "npm run lint -- --fix"
   },
