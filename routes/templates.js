@@ -5,9 +5,9 @@ const template = require('./../controllers/templates.js');
 
 router.get('/', template.getTemplate);
 
-router.post('/', template.postTemplate);
+router.post('/', template.createTemplate);
 
-router.put('/:id', template.putTemplate);
+router.put('/:id', template.updateTemplate);
 
 router.delete('/:id', template.deleteTemplate);
 

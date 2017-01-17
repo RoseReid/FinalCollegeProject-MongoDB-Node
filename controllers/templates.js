@@ -12,7 +12,7 @@ exports.getTemplate = function (req, res, next) {
   });
 };
 
-exports.postTemplate = function (req, res, next) {
+exports.createTemplate = function (req, res, next) {
   const templateData = req.body;
   const template = new Template(templateData);
   template.save(function (err, templateSaved) {
@@ -26,7 +26,7 @@ exports.postTemplate = function (req, res, next) {
   });
 };
 
-exports.putTemplate = function (req, res, next) {
+exports.updateTemplate = function (req, res, next) {
   const templateData = req.body;
   const id = req.params.id;
   Template.findById({_id: id}, function (err, template) {
