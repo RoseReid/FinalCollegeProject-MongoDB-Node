@@ -20,15 +20,7 @@ const templateSchema = new mongoose.Schema({
   }
 });
 
-//exports.Model = db.model('template', templateSchema);
+// exports.Model = db.model('template', templateSchema);
 module.exports = mongoose.model('Template', templateSchema);
 
-// {
 
-//   "question": [
-//     {
-//       "type": "cat questasdfasdfdsions",
-//       "text": "casdfasdat question text"
-//     }
-//   ]
-// }

@@ -4,7 +4,7 @@ const Template = require('../models/templates.js').Model;
 exports.getTemplate = function (req, res, next) {
   Template.find(function (err, template) {
     if (err) {
-      let err = new Error('templates not found');
+      let err = new Error('template not found');
       err.status = (400);
       return next(err);
     }
@@ -17,8 +17,8 @@ exports.postTemplate = function (req, res, next) {
   const template = new Template(templateData);
   template.save(function (err, templateSaved) {
     if (err) {
-      let err = new Error('templates not created');
-      err.status = (409);
+      let err = new Error('template not created');
+      err.status = (500);
       return next(err);
     } else {
       res.json(templateSaved);
@@ -36,8 +36,8 @@ exports.putTemplate = function (req, res, next) {
       template.set(templateData);
       template.save(function (err, templateSaved) {
         if (err) {
-          let err = new Error('templates not created');
-          err.status = (409);
+          let err = new Error('template not updated');
+          err.status = (500);
           return next(err);
         } else {
           res.json(templateSaved);
@@ -55,6 +55,8 @@ exports.deleteTemplate = function (req, res, next) {
     } else {
       template.remove(function (err, templateRemoved) {
         if (err) {
+          let err = new Error('template not deleted');
+          err.status = (500);
           return next(err);
         } else {
           return res.json(templateRemoved);

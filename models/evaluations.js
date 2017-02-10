@@ -3,7 +3,6 @@
 // repetitive code
 const mongoose = require('mongoose');
 
-
 // get url from NODE_ENV
 /*
 const url = 'mongodb://localhost:27017/myEvaluations';
@@ -72,6 +71,7 @@ const evaluationSchema = new mongoose.Schema({
   }
 });
 
+//There static is here since Erik asked me to, I suspect it was just to help me learn about satics.
 evaluationSchema.statics.getNinjasClients = function (ninjaEmail, limit) {
   return this.find({
     'ninja.email': ninjaEmail
@@ -86,4 +86,4 @@ evaluationSchema.statics.getNinjasClients = function (ninjaEmail, limit) {
 };
 
 module.exports = mongoose.model('Evaluation', evaluationSchema);
-//exports.Model = db.model('evaluation', evaluationSchema);
+// exports.Model = db.model('evaluation', evaluationSchema);

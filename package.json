@@ -6,7 +6,7 @@
     "start": "npm start",
     "watch": "npm-scripts-watcher",
     "test": "mocha",
-    "lint": "eslint controllers models routes",
+    "lint": "eslint controllers models routes test",
     "lint:fix": "npm run lint -- --fix"
   },
   "author": "",

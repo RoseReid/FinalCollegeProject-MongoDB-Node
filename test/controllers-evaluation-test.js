@@ -6,51 +6,37 @@ var should = require('should');
 var sinon = require('sinon');
 var assert = require('assert');
 
-/* 1st
-Ensure fetches Ninja email
-mock req to return email (req.get) */
-// given
-
-function getStubbedEvaluation(stub) {
+function getStubbedEvaluation (stub) {
   return proxyquire('../controllers/evaluation.js',
     {
       '../models/evaluations.js': stub
     });
 }
 
-function getHttpSpies() {
-  return {
-    res: { json: sinon.spy() },
-    next: sinon.spy(),
-    req: {
-      get: function () { return 1337; }
-    }
-  };
-}
-
-//test names:
 describe('evaluation', function () {
+// Test 1
+  it('should get eval based on email in headers', function () {
+    var httpSpies = function getHttpSpies () {
+      return {
+        req: {
+          get: sinon.spy()
+        }
+      };
+    };
+    var res = { json: sinon.spy() };
 
-//helper method. call it stubEvaluation and it returns eval
-  it ('should get eval based on email in headers', function () {
-
-    // given
-    var httpSpies = getHttpSpies();
     var evalStub = {
       find: function () {}
     };
     var evaluation = getStubbedEvaluation(evalStub);
+    console.log(httpSpies().req);
+    evaluation.getEvals(httpSpies().req, httpSpies().res);  // when
 
-    // when
-    evaluation.getEvals(httpSpies.req, httpSpies.res, httpSpies.next);
-
-    // then
-    httpSpies.req.get.calledWith('ninja.email').should.equal(true);
+    httpSpies().req.get.called.should.equal(true); // then
   });
 
+// Test 2
   it('should get ninjas evals based on email', function () {
-
-    // given
     var res = { json: sinon.spy() };
     var next = sinon.spy();
     var req = {
@@ -59,69 +45,74 @@ describe('evaluation', function () {
     var evalStub = {
       find: sinon.spy()
     };
-    var evaluation = proxyquire('../controllers/evaluation.js',
-      {
-        '../models/evaluations.js': evalStub
-      });
+    var evaluation = getStubbedEvaluation(evalStub);
 
-    // when
     evaluation.getEvals(req, res, next);
 
-    // then
-    assert(evalStub.find.calledWith({'ninja.email': 1337}));
+    assert.evaluation.calledWith.find('ninja.email').should.equal(1337);
   });
 
-  
-  //test1: returns next error when finding Ninja throws an error
-  //test2: returns 404 error if no evals found
-  //test3: returns json with the found evaluation.
-  it ('should respond with an error when finding Ninja throws an error', function () {
+// Test 3
+  it('should respond with an error when finding Ninja throws an error', function () {
     var res = { json: sinon.spy() };
     var next = sinon.spy();
-    //created an error object
-    var err = new Error('hello meow'); // first this is true, 2nd it is false, 3rd does not matter
     var req = {
       get: function () { return 1337; }
     };
+    var err = new Error('hello meow');
+    var evalStub = {
+      find: function ({evaluation}, fn) {
+        fn(err);
+      }
+    };
+    var evaluation = getStubbedEvaluation(evalStub);
+
+    evaluation.getEvals(req, res, next);
+
+    assert(next.calledWith(err));
+  });
+
+// Test 4
+  it('returns the found evaluation as a json type', function () {
+    var req = {
+      get: function () { return true; }
+    };
+    var res = { json: true };
+
+    var evalStub = {
+      find: function ({evaluation}, fn) {
+        fn(err, mockData1234);
+      }
+    };
+    var evaluation = getStubbedEvaluation(evalStub);
+
+    evaluation.getEvals(req, res); // when
+
+    assert(res.get.calledWith('ninja.email').should.equal(true));
+
+    // httpSpies.req.get.calledWith('ninja.email').should.equal(true); //then
+  });
+
+// test 5
+  it('returns the correct evaluation', function () {
+    var req = {
+      get: function () { return false; }
+    };
+    var err = new Error('404');
+    var res = (err);
+    var next = sinon.spy();
+
     var evalStub = {
       find: function ({evaluation}, fn) {
         fn(err, 1234);
-        //fn(true, false);
-        //fn(true, 1234);
       }
     };
-    var evaluation = proxyquire('../controllers/evaluation.js',
-      {
-        '../models/evaluations.js': evalStub
-      });
+    var evaluation = getStubbedEvaluation(evalStub);
 
-    // when
-    //evaluation.getEvals(req, res, next);
+    evaluation.getEvals(req, res, next); // when
 
-    // then
-    //next.calledWith(err).should.be(true);
+    assert(res.get.calledWith('ninja.email').should.equal(false));
 
-
-    //var expected = new Error('no evals found!');
-    //expected.status = 404;
-    //next.calledWith(expected).should.be(true);
-
-
-    //res.json.calledWith({evaluationSchema: 1234}).should.be(true);
-
+    // httpSpies.req.get.calledWith('ninja.email').should.equal(true); //then
   });
-
 });
-
-
-/* 2nd
-Mock req get(does not matter what I return inside inside find {ninjaEmail:req.get}) */
-
-/* 3rd copy above and then pass in function. put a string 
-or whatever to see that next with string is called
-Repeat (false- but don't pass eval')
-ensure next is called w/ new error
-Repeat the same but (false, pass in eval)=> pass in eval(true/string)
-assert res.json(evalSchema: matches whats in the true/string)
- 
- */
