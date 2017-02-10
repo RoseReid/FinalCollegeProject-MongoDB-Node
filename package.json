@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "npm start",
+    "start": "node server.js",
     "watch": "npm-scripts-watcher",
     "test": "mocha",
     "lint": "eslint controllers models routes test",

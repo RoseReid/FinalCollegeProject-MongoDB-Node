@@ -2,7 +2,7 @@
 const Evaluation = require('../models/evaluations.js');
 
 exports.getEvals = function (req, res, next) {
-  const ninjaEmail = req.get('ninja.email'); 
+  const ninjaEmail = req.get('ninja.email');
   Evaluation.find({'ninja.email': ninjaEmail}, function (err, evaluation) {
     if (err) {
       return next(err);
@@ -16,7 +16,7 @@ exports.getEvals = function (req, res, next) {
   });
 };
 
-//go to models/evaluations.js for static connected to this
+// go to models/evaluations.js for static connected to this
 exports.getNinjasClients = function (req, res, next) {
   const ninjaEmail = req.get('ninja.email');
   const limit = req.get('limit');
@@ -30,7 +30,7 @@ exports.getNinjasClients = function (req, res, next) {
 
 exports.createEval = function (req, res, next) {
   const evaluationData = req.body;
-  const evaluation = new Evaluation(evaluationData); 
+  const evaluation = new Evaluation(evaluationData);
   evaluation.save(function (err, evaluationSaved) {
     if (err) {
       return next(err);
@@ -39,33 +39,36 @@ exports.createEval = function (req, res, next) {
       err.status = (500);
       return next(err);
     } else {
-      res.json(evaluationSaved);
+      res.status(200).json(evaluationSaved);
     }
   });
 };
 
-// updateEvaluation
 exports.updateEval = function (req, res, next) {
   const evaluationData = req.body;
   const id = req.params.id;
   const ninjaEmail = req.get('ninja.email');
-  Evaluation.findOne({_id: id, 'ninja.email': ninjaEmail}, function (err, evaluation) {
+  Evaluation.findById({_id: id, 'ninja.email': ninjaEmail}, function (err, evaluation) {
     if (err) {
-      return next(err);
+      console.log('evaluations not found since id does not exist');
+      next(err);
     }
-    if (!evaluation) {
-      let err = new Error("evaluations not found");
-      err.status = (404);
+    if (evaluation.client.ninjaEmail !== ninjaEmail) {
+      let err = new Error('email in header does not match ninjas email in database!');
+      err.status = (500);
       return next(err);
+    } else {
+      evaluation.set(evaluationData);
+      evaluation.save(function (err, evaluationSaved) {
+        if (err) {
+          console.log(err);
+          err.status = (422);
+          next(err);
+        } else {
+          res.status(200).json(evaluationSaved).id;
+        }
+      });
     }
-    evaluation.set(evaluationData);
-    evaluation.save(function (err, evaluationSaved) {
-      if (err) {
-        err.status = (500);
-        return next(err);
-      }
-      res.json(evaluationSaved);
-    });
   });
 };
 

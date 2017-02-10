@@ -4,14 +4,16 @@
 const mongoose = require('mongoose');
 
 // get url from NODE_ENV
-/*
+
 const url = 'mongodb://localhost:27017/myEvaluations';
 var db = mongoose.createConnection(url);
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
-  console.log('connected evaluation');
+  console.log('mongoose open & connected evaluation');
 });
-*/
+db.once('close', function () {
+   console.log("Closed mongoose-evaluation");
+});
 
 const ninjaSchema = new mongoose.Schema({
   name: {
@@ -71,7 +73,7 @@ const evaluationSchema = new mongoose.Schema({
   }
 });
 
-//There static is here since Erik asked me to, I suspect it was just to help me learn about satics.
+// There static is here since Erik asked me to, I suspect it was just to help me learn about satics. Talk to Erik about this.
 evaluationSchema.statics.getNinjasClients = function (ninjaEmail, limit) {
   return this.find({
     'ninja.email': ninjaEmail
@@ -85,5 +87,5 @@ evaluationSchema.statics.getNinjasClients = function (ninjaEmail, limit) {
         .exec();
 };
 
-module.exports = mongoose.model('Evaluation', evaluationSchema);
-// exports.Model = db.model('evaluation', evaluationSchema);
+// module.exports = mongoose.model('Evaluation', evaluationSchema);
+exports.Model = db.model('evaluation', evaluationSchema);
