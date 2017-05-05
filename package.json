@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.js || true",
     "watch": "npm-scripts-watcher",
-    "test": "mocha test/controllers-evaluation-test.js",
+    "test": "mocha test/controllers-evaluation-test.js || true",
     "lint": "eslint controllers models routes",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -22,6 +22,7 @@
     "mongoose": "^4.5.8",
     "node-restful": "^0.2.5",
     "proxyquire": "^1.7.10",
+    "q": "^1.5.0",
     "request": "^2.79.0",
     "router-express": "^1.5.2",
     "sinon": "^1.17.6",

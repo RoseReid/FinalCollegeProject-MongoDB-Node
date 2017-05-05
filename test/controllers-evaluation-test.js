@@ -6,14 +6,66 @@ var should = require('should');
 // var mockery = require('mockery');
 var sinon = require('sinon');
 
+const { assert } = chai;
+
 /* 1st
 Ensure fetches Ninja email
 mock req to return email (req.get) */
 // given
 
+
 describe('evaluation', function () {
 
-  it ('should return all evaluations', function () {
+  it ('should call req.get with "ninja.email"', function() {
+    // given
+    let firstParam = null;
+    const evaluation = proxyquire('../controllers/evaluation', {
+      '../models/evaluations': {
+        find: (query, callback) => {
+          firstParam = query;
+        },
+      },
+    });
+
+    var correctCallback = false;
+    const req = {
+      get: function(param) {
+        if (param === 'ninja.email') {
+          correctCallback = true;
+        }
+      },
+    };
+    // when
+    evaluation.getEvals(req);
+    // then
+    assert.equal(correctCallback, true);
+  });
+
+  it ('should call req.get with "ninja.email"', function() {
+    // given
+    var firstParam = null;
+    const evaluation = proxyquire('../controllers/evaluation', {
+      '../models/evaluations': {
+        find: (query, callback) => {
+          firstParam = query;
+        },
+      },
+    });
+
+    // {'ninja.email': 'taco'}
+
+    const req = {
+      get: function(param) {
+        return 'taco';
+      },
+    };
+    // when
+    evaluation.getEvals(req);
+    // then
+    assert.equal(firstParam['ninja.email'], 'taco');
+  });
+
+    it ('should return all evaluations', function () {
 
     // given
     var res = { json: sinon.spy() };
